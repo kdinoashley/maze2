@@ -64,12 +64,16 @@ public class Explorer implements IRobotController {
         switch (exits) {
             case 1:
                 direction = deadEnd();
+                break;
             case 2:
                 direction = corridor();
+                break;
             case 3:
                 direction = junction();
+                break;
             case 4:
                 direction = crossRoad();
+                break;
         }
 
         // face the direction and move forward
@@ -190,20 +194,12 @@ public class Explorer implements IRobotController {
 
     // junctions and crossroads are basically the same
     private int uniformForJunctionAndCrossRoad() {
-        int[] noWalls = new int[0];
         int[] explorerDirection = new int[0];
         // check if four directions meet the requirements below, if one does, add it in to the array
         for (int i = 0; i < 4; i++) {
-            if (robot.look(relativeDirection[i]) != IRobot.WALL) {
-                noWalls = extendArray(noWalls, relativeDirection[i]);
-                if (robot.look(relativeDirection[i]) == IRobot.PASSAGE) {
-                    explorerDirection = extendArray(explorerDirection, relativeDirection[i]);
-                }
+            if (robot.look(relativeDirection[i]) == IRobot.PASSAGE) {
+               explorerDirection = extendArray(explorerDirection, relativeDirection[i]);
             }
-        }
-
-        if(explorerDirection.length == 0){
-            explorerDirection = noWalls;
         }
 
         int index = (int)(Math.random() * explorerDirection.length);
